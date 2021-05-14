@@ -1,16 +1,12 @@
-﻿
-
-@using FinanceMentor.Shared;
-@inject HttpClient http;
-
-<h3>ExpenseForm</h3>
+﻿@using FinanceMentor.Shared;
+@inject HttpClient Http;
 
 <div class="card">
     <div class="card-header">
         Add an expense
     </div>
     <div class="card-body">
-        <EditForm Model="@earning" OnInvalidSubmit="@HandleValidSubmit">
+        <EditForm Model="@earning" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="form-group">
@@ -40,27 +36,19 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </EditForm>
-
     </div>
-
-
 </div>
 
-
 @code {
-
     private ExpenseModel earning = new ExpenseModel { Date = DateTime.Today };
 
     [Parameter]
     public EventCallback OnSubmitCallback { get; set; }
 
-
     public async Task HandleValidSubmit()
     {
-        await http.PostAsJsonAsync<ExpenseModel>("api/Expenses", earning);
+        await Http.PostAsJsonAsync<ExpenseModel>("api/Expenses", earning);
         await OnSubmitCallback.InvokeAsync();
     }
-
-
 }
 

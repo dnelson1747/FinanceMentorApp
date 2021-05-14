@@ -1,14 +1,12 @@
 ﻿@using FinanceMentor.Shared;
-@inject HttpClient http;
-
-
+@inject HttpClient Http;
 
 <div class="card">
     <div class="card-header">
         Add an earning
     </div>
     <div class="card-body">
-        <EditForm Model="@earning" OnInvalidSubmit="@HandleValidSubmit">
+        <EditForm Model="@earning" OnValidSubmit="@HandleValidSubmit">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <div class="form-group">
@@ -22,12 +20,12 @@
             <div class="form-group">
                 <label for="categoryInput">Category</label>
                 <InputSelect class="form-control" id="categoryInput" @bind-Value="earning.Category">
-                             @{
-                                 foreach (var value in Enum.GetValues(typeof(EarningCategory))) 
-                                 {
-                                 <option value="@value">@value</option>
-                                 }
-                             }
+                    @{
+                        foreach (var value in Enum.GetValues(typeof(EarningCategory)))
+                        {
+                            <option value="@value">@value</option>
+                        }
+                    }
                 </InputSelect>
             </div>
             <div class="form-group">
@@ -37,27 +35,19 @@
             <div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
-                  </EditForm>
-        
+        </EditForm>
     </div>
-
-
 </div>
 
-
 @code {
-
     private EarningModel earning = new EarningModel { Date = DateTime.Today };
 
     [Parameter]
     public EventCallback OnSubmitCallback { get; set; }
 
-
     public async Task HandleValidSubmit()
     {
-        await http.PostAsJsonAsync<EarningModel>("api/Earnings", earning);
+        await Http.PostAsJsonAsync<EarningModel>("api/Earnings", earning);
         await OnSubmitCallback.InvokeAsync();
     }
-
-
 }
